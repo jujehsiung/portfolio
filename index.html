@@ -18,74 +18,40 @@
 </head>
 <body>
 
-<!-- ======================= TOP BAR ======================= -->
-<div class="topbar">
-  <button class="topbar__menu" id="menuBtn">Menu</button>
-  <span class="topbar__name">Juje Hsiung</span>
+<!-- ======================= FIXED CHROME ======================= -->
+<div class="chrome">
+  <button class="chrome__menu" id="menuBtn">Menu</button>
+  <span class="chrome__copy" id="chromeCopy">Juje Hsiung<br>Copyright © <span id="year">26</span></span>
 </div>
 
 <!-- ======================= OVERLAY MENU ======================= -->
 <nav class="menu" id="menu" aria-label="Main">
   <button class="menu__close" id="menuClose">Close</button>
-  <a href="#editorial">Editorial</a>
-  <a href="#commercial">Commercial</a>
-  <a href="#films">Films</a>
+  <a href="#works">Works</a>
   <a href="#about">About</a>
   <a href="https://instagram.com/_pray4juje" target="_blank" rel="noopener">Instagram ↗</a>
 </nav>
 
 <main id="top">
 
-<!-- ======================= COVER ======================= -->
-<header class="cover" id="cover">
-  <img src="https://framerusercontent.com/images/dG3o1DeshYj0mpmnKrTyVe5z0TM.jpg?scale-down-to=2048&width=3345&height=4181" alt="Juje Hsiung — editorial" fetchpriority="high">
-  <h1 class="cover__title" aria-label="Juje Hsiung"><span class="word">Juje</span> <span class="word">Hsiung</span></h1>
-  <p class="cover__corner meta">Designer &amp; stylist<br>New York</p>
-</header>
+<!-- ======================= COVERFLOW ======================= -->
+<div class="covers" id="covers"><!-- populated by JS from data.js --></div>
 
-<!-- ======================= STATEMENT ======================= -->
-<section class="statement">
-  <p class="statement__side meta meta--muted">Stylist &amp; designer working between editorial, campaign and film.</p>
-  <h3 class="statement__head reveal-words">Looks for editorial, campaign and film. Styling and design, New York.</h3>
-</section>
-
-<!-- ======================= EDITORIAL (incl. menswear) ======================= -->
-<section class="work" id="editorial">
-  <div class="sechead">
-    <h2>Editorial</h2>
-    <span>Styling &amp; design</span>
-  </div>
-  <div class="work__grid" id="editorialGrid"></div>
-</section>
-
-<!-- ======================= COMMERCIAL ======================= -->
-<section class="work" id="commercial">
-  <div class="sechead">
-    <h2>Commercial</h2>
-    <span>Campaign · Lookbook · Retail</span>
-  </div>
-  <div class="work__grid" id="commercialGrid"></div>
+<!-- ======================= ABOUT ======================= -->
+<section class="about" id="about">
+  <p class="meta meta--muted">About</p>
+  <dl class="about__list">
+    <div class="about__row"><dt>Discipline</dt><dd>Styling, design</dd></div>
+    <div class="about__row"><dt>Based</dt><dd>New York City</dd></div>
+    <div class="about__row"><dt>Work</dt><dd>Editorial, campaign, film, menswear</dd></div>
+    <div class="about__row"><dt>Contact</dt><dd><a href="https://instagram.com/_pray4juje" target="_blank" rel="noopener">@_pray4juje</a></dd></div>
+  </dl>
 </section>
 
 <!-- ======================= FILMS ======================= -->
 <section class="films" id="films">
-  <div class="sechead">
-    <h2>Films</h2>
-    <span>Moving image</span>
-  </div>
-  <h3 class="films__head reveal-words">Styling for music video and short film.</h3>
+  <p class="meta meta--muted">Films — moving image</p>
   <div class="films__grid" id="filmsGrid"></div>
-</section>
-
-<!-- ======================= ABOUT / CREDITS ======================= -->
-<section class="credits" id="about">
-  <p class="meta meta--muted">About</p>
-  <dl class="credits__list">
-    <div class="credits__row"><dt>Discipline</dt><dd>Styling, design</dd></div>
-    <div class="credits__row"><dt>Based</dt><dd>New York City</dd></div>
-    <div class="credits__row"><dt>Work</dt><dd>Editorial, campaign, film, menswear</dd></div>
-    <div class="credits__row"><dt>Contact</dt><dd><a href="https://instagram.com/_pray4juje" target="_blank" rel="noopener">@_pray4juje</a></dd></div>
-  </dl>
 </section>
 
 <!-- ======================= INSTAGRAM ======================= -->
@@ -97,36 +63,14 @@
   <div class="ig__grid" id="igGrid"></div>
 </section>
 
-<!-- ======================= NEXT / INDEX ======================= -->
-<section class="next">
-  <p class="next__head">Index</p>
-  <div class="next__grid">
-    <a class="next__card" href="#editorial">
-      <img loading="lazy" src="https://framerusercontent.com/images/UaWNdFGeMqZJWovibBALdd3dy8.jpg?scale-down-to=2048&width=2079&height=2598" alt="Editorial">
-      <span>Editorial</span>
-    </a>
-    <a class="next__card" href="#commercial">
-      <img loading="lazy" src="https://framerusercontent.com/images/vcpHuzgM2xqYZPuhuYYLIbalOtg.jpg?scale-down-to=2048&width=3840&height=2560" alt="Commercial">
-      <span>Commercial</span>
-    </a>
-  </div>
-</section>
-
 </main>
 
 <!-- ======================= FOOTER ======================= -->
 <footer class="footer">
-  <span>© <span id="year">2026</span> Juje Hsiung</span>
+  <span>© <span id="year2">2026</span> Juje Hsiung</span>
   <a href="https://instagram.com/_pray4juje" target="_blank" rel="noopener">Instagram ↗</a>
   <a href="#top">Back to top ↑</a>
 </footer>
-
-<!-- ======================= LIGHTBOX ======================= -->
-<div class="lightbox" id="lightbox" hidden>
-  <button class="lightbox__close" id="lbClose" aria-label="Close">×</button>
-  <img class="lightbox__img" id="lbImg" src="" alt="">
-  <p class="lightbox__cap" id="lbCap"></p>
-</div>
 
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app.js"></script>

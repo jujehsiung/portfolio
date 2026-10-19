@@ -1,29 +1,12 @@
-/* Behavior — menu, cover, reveals, work grids, films, instagram, lightbox. */
+/* Behavior — coverflow, menu, films, instagram. */
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const D = window.SITE || {};
 
   /* ---------- year ---------- */
-  const y = $("#year"); if (y) y.textContent = new Date().getFullYear();
-
-  /* ---------- cover load ---------- */
-  requestAnimationFrame(() => setTimeout(() => $("#cover")?.classList.add("loaded"), 100));
-  $$("#cover .word").forEach((w) => { w.innerHTML = `<span>${w.textContent}</span>`; });
-
-  /* ---------- split-word reveal ---------- */
-  $$(".reveal-words").forEach((el) => {
-    const words = el.textContent.trim().split(/\s+/);
-    el.innerHTML = words.map((w, i) => `<span class="w" style="transition-delay:${i * 26}ms">${w}</span>`).join(" ");
-  });
-  function forceReveal() {
-    $$(".reveal-words").forEach((el) => {
-      const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.92) el.classList.add("in");
-    });
-  }
-  window.addEventListener("scroll", forceReveal, { passive: true });
-  setTimeout(() => $$(".reveal-words").forEach((el) => el.classList.add("in")), 2600);
+  const y = $("#year"); if (y) y.textContent = String(new Date().getFullYear()).slice(2);
+  const y2 = $("#year2"); if (y2) y2.textContent = new Date().getFullYear();
 
   /* ---------- overlay menu ---------- */
   const menu = $("#menu"), menuBtn = $("#menuBtn"), menuClose = $("#menuClose");
@@ -34,28 +17,26 @@
   $$("#menu a").forEach((a) => a.addEventListener("click", closeMenu));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && menu?.classList.contains("open")) closeMenu(); });
 
-  /* ---------- work grids ---------- */
-  function buildGrid(sel, items, startNum) {
-    const grid = $(sel);
-    if (!grid) return;
-    items.forEach((p, i) => {
-      const num = String(startNum + i).padStart(2, "0");
-      const ratio = i % 5 === 3 ? "ratio-wide" : "ratio-tall";
-      const a = document.createElement("a");
-      a.className = `work__item ${ratio}`;
-      a.href = "#";
-      a.innerHTML = `<img loading="lazy" src="${p.img}" alt="${p.title}"><span class="work__num">${num}</span>`;
-      a.addEventListener("click", (e) => { e.preventDefault(); openLightbox(p.img, `${p.title} — ${p.client}`); });
-      const cap = document.createElement("div");
-      cap.className = "work__cap";
-      cap.innerHTML = `<h3>${p.title}</h3><p>${p.client} · ${p.year}</p>`;
-      const wrap = document.createElement("div");
-      wrap.appendChild(a); wrap.appendChild(cap);
-      grid.appendChild(wrap);
-    });
-  }
-  buildGrid("#editorialGrid", D.editorial || [], 1);
-  buildGrid("#commercialGrid", D.commercial || [], 1 + (D.editorial || []).length);
+  /* ---------- coverflow ---------- */
+  const covers = $("#covers");
+  (D.projects || []).forEach((p) => {
+    const el = document.createElement("section");
+    el.className = "cover";
+    el.id = "works";
+    el.innerHTML = `
+      <img loading="lazy" src="${p.img}" alt="${p.title}">
+      <div class="cover__meta">
+        <h2>${p.title}</h2>
+        <p>${p.client}</p>
+      </div>
+      <span class="cover__year">${p.year}</span>`;
+    covers?.appendChild(el);
+  });
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
+    { threshold: 0.25 }
+  );
+  $$(".cover").forEach((c) => io.observe(c));
 
   /* ---------- films ---------- */
   const filmsGrid = $("#filmsGrid");
@@ -87,17 +68,4 @@
     a.innerHTML = `<img src="${src}" alt="Instagram post" loading="lazy">`;
     ig?.appendChild(a);
   });
-
-  /* ---------- lightbox ---------- */
-  const lb = $("#lightbox"), lbImg = $("#lbImg"), lbCap = $("#lbCap");
-  function openLightbox(src, cap) {
-    lbImg.src = src; lbCap.textContent = cap || "";
-    lb.hidden = false; document.body.style.overflow = "hidden";
-  }
-  const closeLb = () => { lb.hidden = true; document.body.style.overflow = ""; };
-  $("#lbClose")?.addEventListener("click", closeLb);
-  lb?.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !lb.hidden) closeLb(); });
-
-  window.__openLightbox = openLightbox;
 })();
