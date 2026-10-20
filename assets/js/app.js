@@ -17,39 +17,44 @@
   $$("#menu a").forEach((a) => a.addEventListener("click", closeMenu));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && menu?.classList.contains("open")) closeMenu(); });
 
-  /* ---------- coverflow ---------- */
-  const covers = $("#covers");
-  (D.projects || []).forEach((p) => {
-    const el = document.createElement("section");
-    el.className = "cover";
-    el.id = "works";
-    el.innerHTML = `
-      <img loading="lazy" src="${p.img}" alt="${p.title}">
-      <div class="cover__meta">
-        <h2>${p.title}</h2>
-        <p>${p.client}</p>
-      </div>
-      <span class="cover__year">${p.year}</span>`;
-    covers?.appendChild(el);
+  /* ---------- works grid (all images, uncropped) ---------- */
+  const grid = $("#worksGrid");
+  (D.images || []).forEach((im) => {
+    const fig = document.createElement("figure");
+    fig.className = `works__item works__item--${im.o}`;
+    fig.innerHTML = `
+      <img loading="lazy" src="${im.src}" alt="${im.title}">
+      <figcaption><span>${im.title}</span><span>${im.cat}</span></figcaption>`;
+    grid?.appendChild(fig);
   });
   const io = new IntersectionObserver(
     (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
-    { threshold: 0.25 }
+    { threshold: 0.15 }
   );
-  $$(".cover").forEach((c) => io.observe(c));
+  $$(".works__item").forEach((c) => io.observe(c));
 
   /* ---------- films ---------- */
   const filmsGrid = $("#filmsGrid");
   (D.films || []).forEach((f) => {
     const el = document.createElement("div");
     el.className = "film";
+    const hasYT = !!f.youtube;
     const hasSrc = !!f.src;
+    const thumb = f.poster || (hasYT ? `https://img.youtube.com/vi/${f.youtube}/maxresdefault.jpg` : "");
     el.innerHTML = `
-      <img src="${f.poster}" alt="${f.title}" loading="lazy">
+      ${thumb ? `<img src="${thumb}" alt="${f.title}" loading="lazy">` : ""}
       ${hasSrc ? `<video src="${f.src}" muted loop playsinline preload="none"></video>` : ""}
+      <span class="film__play" aria-hidden="true">▶</span>
       <span class="film__cap">${f.title} — ${f.credit}</span>`;
     filmsGrid?.appendChild(el);
-    if (hasSrc) {
+
+    if (hasYT) {
+      el.addEventListener("click", () => {
+        el.innerHTML = `<iframe src="https://www.youtube.com/embed/${f.youtube}?autoplay=1&rel=0&playsinline=1" title="${f.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <span class="film__cap">${f.title} — ${f.credit}</span>`;
+        el.classList.add("playing");
+      });
+    } else if (hasSrc) {
       const v = el.querySelector("video");
       const play = () => { el.classList.add("playing"); v.play().catch(() => {}); };
       const stop = () => { el.classList.remove("playing"); v.pause(); };
